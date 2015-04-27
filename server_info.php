@@ -1,5 +1,12 @@
 <?php
-	header('Content-type: text/html; charset=utf-8');
+	if(!isset($_SESSION))
+	{
+		session_start();
+	}
+	if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
+	{
+		header('Location: login.php');
+	}
 	$servername = "localhost";//stardock.cs.virginia.edu
 	$username = "root";//aeb3bs
 	$pass = "password";//whatever your password is

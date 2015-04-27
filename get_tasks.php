@@ -1,12 +1,22 @@
 <?php
 	session_start();
 	require 'server_info.php';
-	$sql = "SELECT * from tasks ";
-	$array = array();
+	$username = trim($_SESSION['username']);
+	$sql = "SELECT * from tasks JOIN needs JOIN users
+	WHERE tasks.id = needs.task_id AND needs.user_id = users.id";// AND users.username <> '$username'";
+	if(!isset($_POST['mytasks']))
+	{
+	$sql = $sql . " AND users.username <> '$username'";
+	}
+	else
+	{
+	$sql = $sql . " AND users.username = '$username'";
+	}
+	$array = [];
 	if(isset($_POST['words']))
 	{
 		$words = explode(" ", $_POST['words']);
-		$sql = $sql . "WHERE ";
+		$sql = $sql . "WHERE `filled` = 0 AND ";
 		foreach($words as $value)
 		{
 			$sql = $sql . "
@@ -17,12 +27,6 @@
 	$result=mysqli_query($conn,$sql);
 	while($row=$result->fetch_assoc())
 	{
-		$task_id = $row['id'];
-		$sql = "SELECT * FROM `needs` NATURAL JOIN
-		`users` WHERE `id` = `user_id` AND `task_id` = '$task_id'";
-		$temp_result = mysqli_query($conn, $sql);
-		$row_temp = $temp_result->fetch_assoc();
-		$row['user'] = $row_temp['username'];
 		array_push($array, $row);
 	}
 	echo json_encode($array);

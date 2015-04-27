@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2015 at 09:34 PM
+-- Generation Time: Apr 27, 2015 at 08:03 AM
 -- Server version: 5.5.32
 -- PHP Version: 5.4.16
 
@@ -19,6 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `cs4753`
 --
+DROP DATABASE IF EXISTS `cs4753`;
 CREATE DATABASE IF NOT EXISTS `cs4753` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `cs4753`;
 
@@ -31,6 +32,7 @@ USE `cs4753`;
 CREATE TABLE IF NOT EXISTS `needs` (
   `user_id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`task_id`),
   KEY `user_id` (`user_id`),
   KEY `task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -40,10 +42,34 @@ CREATE TABLE IF NOT EXISTS `needs` (
 --
 
 INSERT INTO `needs` (`user_id`, `task_id`) VALUES
-(1, 11),
 (1, 8),
+(1, 11),
 (7, 9),
 (7, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requests`
+--
+
+CREATE TABLE IF NOT EXISTS `requests` (
+  `user_id` int(11) NOT NULL,
+  `task_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`user_id`,`task_id`),
+  KEY `user_id` (`user_id`),
+  KEY `task_id` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `requests`
+--
+
+INSERT INTO `requests` (`user_id`, `task_id`, `status`, `description`) VALUES
+(1, 8, -1, 'Oh I want to do that shit.\r\n\r\n571-294-7610.'),
+(7, 8, 1, 'Helloworld.');
 
 -- --------------------------------------------------------
 
@@ -60,18 +86,19 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `pay` double NOT NULL,
   `date` datetime NOT NULL,
   `title` varchar(100) NOT NULL,
+  `filled` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `description`, `lat`, `lon`, `address`, `pay`, `date`, `title`) VALUES
-(8, 'I need somebody to clean my apartment.', NULL, NULL, '1815 Jefferson Park Avenue Apartment #15 Charlottesville VA', 50.75, '2015-05-20 17:00:00', 'Clean Apartment'),
-(9, 'Need somebody to build me a website This needs to be done by June 10th, 2015. This website needs to be able to allow users to post tasks, and allow users to respond to these tasks. Feel free to contact me by email or by cell at 5712947610.', NULL, NULL, 'n/a', 500, '2015-06-10 15:00:00', 'Need Programmer'),
-(10, 'I need groceries. Heres the list milk eggs pizza hot pockets peanut butter bread', NULL, NULL, '10802 Windcloud Court Oakton VA 22124', 20, '2015-04-20 13:00:00', 'Groceries'),
-(11, 'I need a ride to Northern Virginia. Willing to chip in $10 for gas.', NULL, NULL, 'Observatory Hill', 10, '2015-05-04 17:00:00', 'Need a ride to NOVA.');
+INSERT INTO `tasks` (`id`, `description`, `lat`, `lon`, `address`, `pay`, `date`, `title`, `filled`) VALUES
+(8, 'I need somebody to clean my apartment.', NULL, NULL, '1815 Jefferson Park Avenue Apartment #15 Charlottesville VA', 50.75, '2015-05-20 17:00:00', 'Clean Apartment', 1),
+(9, 'Need somebody to build me a website This needs to be done by June 10th, 2015. This website needs to be able to allow users to post tasks, and allow users to respond to these tasks. Feel free to contact me by email or by cell at 5712947610.', NULL, NULL, 'n/a', 500, '2015-06-10 15:00:00', 'Need Programmer', 0),
+(10, 'I need groceries. Heres the list milk eggs pizza hot pockets peanut butter bread', NULL, NULL, '10802 Windcloud Court Oakton VA 22124', 20, '2015-04-20 13:00:00', 'Groceries', 0),
+(11, 'I need a ride to Northern Virginia. Willing to chip in $10 for gas.', NULL, NULL, 'Observatory Hill', 10, '2015-05-04 17:00:00', 'Need a ride to NOVA.', 0);
 
 -- --------------------------------------------------------
 
@@ -106,9 +133,17 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `first_name`, `last_
 CREATE TABLE IF NOT EXISTS `works` (
   `user_id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`task_id`),
   KEY `user_id` (`user_id`),
   KEY `task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `works`
+--
+
+INSERT INTO `works` (`user_id`, `task_id`) VALUES
+(7, 8);
 
 --
 -- Constraints for dumped tables
@@ -120,6 +155,13 @@ CREATE TABLE IF NOT EXISTS `works` (
 ALTER TABLE `needs`
   ADD CONSTRAINT `needs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `needs_ibfk_2` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`);
+
+--
+-- Constraints for table `requests`
+--
+ALTER TABLE `requests`
+  ADD CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`);
 
 --
 -- Constraints for table `works`

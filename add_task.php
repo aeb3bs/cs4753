@@ -1,6 +1,5 @@
 <?php
 	require 'server_info.php';
-	session_start();
 	if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
 	{
 		//header('Location: login.php');
@@ -64,7 +63,7 @@
 				      <ul class="nav nav-pills topnav ">
 				      	   <li id="bannerButton"><a href="home.php">Home</a></li>
 						   <li id="bannerButton"> <a href="add_task.php">Add Task</a> </li>	
-						   <li id="bannerButton"> <a href="">My Tasks</a> </li>
+						   <li id="bannerButton"> <a href="mytasks.php">My Tasks</a> </li>
 				           <li id="bannerButton"> <a href="">Contact Us</a> </li>
 						   <li id="bannerButton"> <a href="logout.php">Logout</a> </li>
 				    <!--  </ul> -->

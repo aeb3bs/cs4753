@@ -57,7 +57,28 @@
 		width: 1%;
 
 	}
+	#requestTable caption{
+		border-bottom: 2px solid;
+		padding-bottom: 10px;
+		color: black;
+	}
+	#requestTable td{
+		padding-top:10px;
+		padding-bottom:10px;`
+	}
+	#requestTable th{
+		padding-top:10px;
+		padding-bottom:10px;
+		border-bottom: 2px solid;
+		width: 1%;
+
+	}
 	#taskTable caption{
+		border-bottom: 2px solid;
+		padding-bottom: 10px;
+		color: black;
+	}
+	#requestTable caption{
 		border-bottom: 2px solid;
 		padding-bottom: 10px;
 		color: black;

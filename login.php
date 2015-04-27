@@ -2,7 +2,11 @@
 	<script src="functions.js"></script>
 <head>
 <?php	
-	require 'server_info.php';
+	$servername = "localhost";//stardock.cs.virginia.edu
+	$username = "root";//aeb3bs
+	$pass = "password";//whatever your password is
+	$dbname = 'cs4753';
+	$conn = new mysqli($servername, $username, $pass, $dbname);
 	session_start();
 	if(isset($_POST['username']) && isset($_POST['password']))
 	{

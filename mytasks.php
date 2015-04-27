@@ -1,5 +1,10 @@
 <?php
-	require "server_info.php";
+	session_start();
+	if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
+	{
+		header('Location: login.php');
+	}
+	$user_id = $_SESSION['user_id'];
 ?>
 <html>
 <head>
@@ -29,7 +34,7 @@
 				      <ul class="nav nav-pills topnav ">
 				      	   <li id="bannerButton"><a href="home.php">Home</a></li>
 						   <li id="bannerButton"> <a href="add_task.php">Add Task</a> </li>					
-				           <li id="bannerButton"> <a href="mytasks.php">My Tasks</a> </li>
+				           <li id="bannerButton"> <a href="">My Tasks</a> </li>
 						   <li id="bannerButton"> <a href="">Contact Us</a> </li>
 						   <li id="bannerButton"> <a href="logout.php">Logout</a> </li>
 				    <!--  </ul> -->
@@ -53,27 +58,32 @@
 		</div-->
 
 		<div id="taskContainer" style="padding-left:1%; padding-top:0px;">
-			<div>
-				<button onclick="getTasks(document.getElementById('words_input').value)" class='btn btn-primary' style="padding:4px 12px; float:right; width:3%" type='button' value='Go'>Go</button>
-				<input id="words_input" onkeydown="if (event.keyCode == 13) { getTasks(document.getElementById('words_input').value); }" class='form-control' style="float:right; height:30px; width: 97%;" type='text' placeholder='Search Tasks By Subject'>
-			</div>
-			<div id="nearby_tasks" style="width: 100%; padding-top:0px; height:auto;">
+			<div id="nearby_tasks" style="width: 100%; height: auto;">
 				<table id="taskTable" hidden>
-				<caption><img id = "nearby" src=pin.png><b>Nearby Tasks</b></caption>
-				<tr>
-					<th><i>User</i></th>
-					<th><i>Subject</i></th>
-					<th><i>Address</i></th>
-					<th><i>Date</i></th>
-					<th><i>Pay</i></th>
-				</tr>
+				<caption><img id = "nearby" src=pin.png><b>My Tasks</b></caption>
 				<h1 id="load_screen_tasks" hidden>Loading tasks...</h1>
 				<script>
 					fadeloop("#load_screen_tasks", 1500, 1500, tasks==null);
-					getTasks();
+					getMyTasks();
 				</script>
 				<div id="tasks">
 				</div>
 				</table>
 			</div>
+			<div id="nearby_tasks" style="width: 100%; padding-top:0px; height:auto;">
+				<table id="requestTable" hidden>
+				<h3 hidden><b>Requests To Do Your Tasks</b></h3>
+				<h1 id="load_screen_requests" hidden>Loading requests...</h1>
+				<script>
+					fadeloop("#load_screen_requests", 1500, 1500, tasks==null);
+					var temp = <?php echo $user_id; ?>;
+					getMyRequests(temp);
+				</script>
+				<div id="requests">
+				</div>
+				
+				</table>
+			</div>
 		</div>
+</body>
+</html>
